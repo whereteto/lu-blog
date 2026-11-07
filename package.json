@@ -1,0 +1,29 @@
+{
+  "name": "lu-blog-forum",
+  "version": "1.0.0",
+  "description": "  LuBlog forum",
+  "main": "serv.js",
+  "scripts": {
+    "start": "node serv.js",
+    "dev": "nodemon serv.js",
+    "test": "echo \"no have xd\""
+  },
+  "keywords": [
+    "forum",
+    "blog",
+    "express",
+    "nodejs",
+    "discord-webhook"
+  ],
+  "author": "Lu",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

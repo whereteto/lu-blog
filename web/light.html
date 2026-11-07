@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lu Blog</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/gg-sans');
+
+        body {
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #ffff;
+            color: #1f1f1f;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    a {
+    color: #ff6565; 
+    text-decoration: none; 
+    }
+    
+    a svg:hover {
+        transform: scale(1);
+    }
+a:hover {
+    text-decoration: underline;
+}
+        img.emoji {
+            height: 1em;
+            width: 1em;
+            margin: 0 .05em 0 .1em;
+            vertical-align: -0.1em;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0 0 10px 0;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <h1 class="title">Hello</h1>
+    <p>Welcome to my blog 🤪</p>
+    <a href="dark.html">Dark Mode ☀️ 🤓</a>
+    <a href="iframe.html">IFrame Tool  🤓</a>
+    <a href="base64.html">Base64 for nerds 🤓</a>
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+    <div id="location-info" style="font-size: 0.8rem; color: #949ba4; margin-top: 10px;">
+    pls wait
+  </div>
+  <a href="https://discord.gg/Wz24yfxPn" target="_blank" title="Join to a server (by my friend)" style="display: inline-block; margin-top: 20px; color: #5865F2; transition: transform 0.2s;">
+    <svg width="32" height="32" viewBox="0 0 127.14 96.36" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.15c2.62-27.28-4.52-51.2-19.49-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5.18-12.72,11.45-12.72S53.9,46,53.88,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.18-12.72,11.45-12.72S96.14,46,96.12,53,90.96,65.69,84.69,65.69Z"/>
+    </svg>
+</a>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            twemoji.parse(document.body);
+        });
+         const element = new Image();
+    Object.defineProperty(element, 'id', {
+        get: function() {
+            console.log("The leyend say : The cow say moo and the nerds say girlfriends");
+        }
+    });
+    console.log('%c', element);
+    function getFlagEmoji(countryCode) {
+        if (!countryCode) return '🏳️';
+        return countryCode.toUpperCase().replace(/./g, char => 
+            String.fromCodePoint(127397 + char.charCodeAt(0))
+        );
+    }
+
+    fetch('https://ipwho.is/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const flag = getFlagEmoji(data.country_code);
+                const infoDiv = document.getElementById('location-info');
+                infoDiv.innerHTML = `${flag} ${data.city},`;
+                if (typeof twemoji !== 'undefined') {
+                    twemoji.parse(infoDiv);
+                }
+            } else {
+                console.log("fauld")
+            }
+        })
+        .catch(error => {
+            document.getElementById('location-info').innerText = '';
+        });
+    </script>
+</body>
+</html>
