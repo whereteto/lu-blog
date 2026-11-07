@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
     }
 
     // Prevent Directory Traversal attacks
-    let safeUrl = req.url === '/' ? '/dark.html' : req.url;
+    let safeUrl = req.url === '/' ? 'web/dark.html' : req.url;
     safeUrl = safeUrl.split('?')[0].split('#')[0];
 
     let filePath = path.normalize(path.join(__dirname, safeUrl));
