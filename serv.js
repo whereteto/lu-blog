@@ -11,11 +11,11 @@ const server = http.createServer((req, res) => {
     }
 
     // Prevent Directory Traversal attacks
-    let safeUrl = req.url === '/' ? '/dark.html' : req.url;
+    let safeUrl = req.url === '/' ? 'web/dark.html' : req.url;
     safeUrl = safeUrl.split('?')[0].split('#')[0];
 
     let filePath = path.normalize(path.join(__dirname, safeUrl));
-    if (!filePath.startsWith(__dirname)) {
+    if (!filePath.startsWith(path.normalize(__dirname))) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Forbidden');
         return;
@@ -23,12 +23,48 @@ const server = http.createServer((req, res) => {
 
     fs.stat(filePath, (err, stats) => {
         if (err || !stats.isFile()) {
+            // Si el archivo no existe, probar en el directorio web/ para archivos HTML
+            if (path.extname(safeUrl) === '.html') {
+                const webPath = path.join(__dirname, 'web', safeUrl);
+                fs.stat(webPath, (errWeb, statsWeb) => {
+                    if (!errWeb && statsWeb.isFile()) {
+                        filePath = webPath;
+                        sendFile(filePath, res);
+                        return;
+                    }
+                    // Si no está en web/, probar con 404.html
+                    filePath = path.join(__dirname, '404.html');
+                    fs.stat(filePath, (err404, stats404) => {
+                        if (err404 || !stats404.isFile()) {
+                            filePath = path.join(__dirname, 'web', '404.html');
+                            fs.stat(filePath, (err404Web, stats404Web) => {
+                                if (err404Web || !stats404Web.isFile()) {
+                                    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+                                    res.end('404 Not Found');
+                                    return;
+                                }
+                                sendFile(filePath, res);
+                            });
+                            return;
+                        }
+                        sendFile(filePath, res);
+                    });
+                });
+                return;
+            }
+            // Para archivos no HTML, usar el 404.html estándar
             filePath = path.join(__dirname, '404.html');
-            // Re-stat to check if 404.html exists
             fs.stat(filePath, (err404, stats404) => {
                 if (err404 || !stats404.isFile()) {
-                    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-                    res.end('404 Not Found');
+                    filePath = path.join(__dirname, 'web', '404.html');
+                    fs.stat(filePath, (err404Web, stats404Web) => {
+                        if (err404Web || !stats404Web.isFile()) {
+                            res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+                            res.end('404 Not Found');
+                            return;
+                        }
+                        sendFile(filePath, res);
+                    });
                     return;
                 }
                 sendFile(filePath, res);
